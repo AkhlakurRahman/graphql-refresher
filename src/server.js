@@ -1,24 +1,26 @@
 import { GraphQLServer } from 'graphql-yoga';
 
-const typeDefs = `
-  type Query {
-    name: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    name: () => {
-      return 'Hi there';
-    }
-  }
-};
+import db from './db';
+import Post from './resolvers/Post';
+import User from './resolvers/User';
+import Query from './resolvers/Query';
+import Comment from './resolvers/Comment';
+import Mutation from './resolvers/Mutation';
 
 const server = new GraphQLServer({
-  typeDefs,
-  resolvers
+  typeDefs: './src/schema.graphql',
+  resolvers: {
+    Query,
+    Mutation,
+    Post,
+    Comment,
+    User
+  },
+  context: {
+    db
+  }
 });
 
 server.start(() => {
-  console.log(`Server started on http://localhost:4444`);
+  console.log('The server is up!');
 });
